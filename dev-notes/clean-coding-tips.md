@@ -1,6 +1,7 @@
-## Clean Coding Tips
+# Clean Coding Tips
 
-### Principles
+## Principles
+
 - The right tool for thr right job
   - Watch for boundaries
   - Stay native
@@ -14,13 +15,14 @@
   - Format for readability
   - Favor code over comments
 
-### Naming
+## Naming
+
 - Class naming guidelines
   - Noun
   - Be specific
   - Single responsibility
   - Avoid generic suffixes
-- Avoid side effects. Eg. 
+- Avoid side effects. Eg.
   - CheckPassword shouldn't log users out
   - ValidateSubmission shouldn't save
   - GetUser shouldn't create their session
@@ -33,18 +35,24 @@
 - Strive for symmetry
 - Verbalize when struggling
 
-### Conditionals
+## Conditionals
+
 - Compare booleans implicitly.
   - ❌
+
     ```C#
       if (loggedIn == true)
     ```
+
   - ✔
+
     ```C#
       if (loggedIn)
     ```
+
 - Assign booleans implicitly.
   - ❌
+
     ```C#
       bool goingToChipotleForLunch;
       if (cashInWallet > 6.00)
@@ -56,21 +64,29 @@
         goingToChipotleForLunch = false;
       }
     ```
+
   - ✔
+
     ```C#
       bool goingToChipotleForLunch = cashInWallet > 6.00;
     ```
+
 - Be positive
   - ❌
+
     ```C#
       if (!isNotLoggedIn)
     ```
+
   - ✔
+
     ```C#
       if (loggedIn)
     ```
+
 - Ternary is beautiful
   - ❌
+
     ```C#
       int registrationFee;
       if (isSpeaker)
@@ -82,21 +98,29 @@
         registrationFee = 50;
       }
     ```
+
   - ✔
+
     ```C#
       int registrationFee = isSpeaker ? 0 : 50;
     ```
+
 - Be strongly typed, Not **Stringly** typed
   - ❌
+
     ```C#
       if (employeeType == "manager")
     ```
+
   - ✔
+
     ```C#
       if (employee.type == EmployeeType.Manager)
     ```
+
 - Magic numbers
   - ❌
+
     ```C#
       if (age > 21)
       {
@@ -108,7 +132,9 @@
         // body here
       }
     ```
+
   - ✔
+
     ```C#
       const int legalDrinkingAge = 21;
       if (age > legalDrinkingAge)
@@ -121,8 +147,10 @@
         // body here
       }
     ```
+
 - Complex conditionals
   - ❌
+
     ```C#
       if (employee.Age > 55 && 
           employee.YearsEmployed > 10 && 
@@ -135,14 +163,18 @@
       if ((fileExt == ".mp4" || fileExt == ".mpg" || fileExt == ".avi")
           && (isAdmin || isActiveFile))
     ```
+
   - ✔
     1. Intermediate variables
+
         ```C#
           bool eligibleForPension = employee.Age > 55
             && employee.YearsEmployed > 10
             && employee.IsRetired;
         ```
+
     2. Encapsulte via function
+
         ```C#
           private bool ValidFileRequest(
             string fileExtension, 
@@ -168,8 +200,10 @@
             return validFileType && userIsAllowedToViewFile;
           }    
         ```
+
 - Favor polymorphism over switch
   - ❌
+
     ```C#
       public void LoginUser(User user)
       {
@@ -187,7 +221,9 @@
         }
       }
     ```
+
   - ✔
+
     ```C#
       public void LoginUser(User user)
       {
@@ -228,9 +264,11 @@
         }
       }
     ```
+
     ***Note: We still need a switch statement in the factory class to create the correct user class***
 - Be declarative
   - ❌
+
     ```C#
       List<User> matchingUsers = new List<User>();
       foreach (var user in users)
@@ -244,14 +282,18 @@
 
       return matchingUsers;
     ```
+
   - ✔
+
     ```C#
       return users
         .Where(u => u.AccountBalance < minAccountBalance)
         .Where(u => u.Status == Status.Active);
     ```
+
 - Table driven methods
   - ❌
+
     ```C#
       if (age < 20)
       {
@@ -270,6 +312,7 @@
         return 516.25m;
       }
     ```
+
   - ✔
     | InsuranceRateId  |  MaximumAge  |  Rate  |
     |----------------- | ------------ | ------ |
@@ -281,13 +324,15 @@
     ```C#
       return Repository.GetInsuranceRate(age);
     ```
+
   - Great for dynamic logic
   - Avoids hard coding
   - Write less code
   - Avoids complex data structures
   - Make changes without a code deployment
 
-### Methods
+## Methods
+
 - When To Create a Function
   - Duplication
   - Indentation
@@ -297,6 +342,7 @@
 - Eliminate excessive Indentation (Arrow Code). Solutions for excessive indentation
   - Extract Method
     - Before
+
       ```C#
         if
           if
@@ -306,7 +352,9 @@
           end if
         end if
       ```
+
     - After
+
       ```C#
         if
           if
@@ -321,8 +369,10 @@
           end while
         }
       ```
+
   - Fail Fast
     - ❌
+
       ```C#
         public void RegisterUser(string username, string password) 
         {
@@ -341,7 +391,9 @@
           }
         }
       ```
+
     - ✔
+
       ```C#
         public void RegisterUser(string username, string password) 
         {
@@ -356,9 +408,11 @@
           }
           // register user
         }
-      ``` 
+      ```
+
   - Return Early
     - ❌
+
       ```C#
         private bool ValidUsername(string username)
         {
@@ -383,7 +437,9 @@
           return isValid;
         }
       ```
+
     - ✔
+
       ```C#
         private bool ValidUsername(string username)
         {
@@ -401,6 +457,7 @@
           return IsUniqueUsername(username); 
         }
       ```
+
 - Do One Thing
   - Aids the reader
   - Promotes reuse
@@ -411,15 +468,20 @@
   - Do one thing
 - How Many Parameters?
   - ❌
+
     ```C#
       public void SaveUser(string firstName, string lastName, string state, string zip, string eyeColor, string phone, string fax, string maidenName, bool sendEmail, int emailFormat, bool printReport, bool sendBill)
     ```
+
   - ✔
+
     ```C#
       public void SaveUser(User user)
     ```
+
 - Avoid Flag Arguments
   - ❌
+
     ```C#
       private void SaveUser(User user, bool emailUser)
       {
@@ -430,7 +492,9 @@
         }
       }
     ```
+
   - ✔
+
     ```C#
       private void SaveUser(User user)
       {
@@ -442,6 +506,7 @@
         //email user
       }
     ```
+
 - Signs It’s Too Long
   - Whitespace & Comments
   - Scrolling required
@@ -449,9 +514,9 @@
   - Multiple conditionals
   - Hard to digest
 
-  ***Note:*** 
-    - ***Rarely be over 20 lines. Rarely over 3 parameters.***
-    - ***Simple functions can be longer. Complex functions should be short.***
+  ***Note:***
+  - ***Rarely be over 20 lines. Rarely over 3 parameters.***
+  - ***Simple functions can be longer. Complex functions should be short.***
 
 - Exception Types
   - Unrecoverable. Avoid catching unrecoverable exceptions.
@@ -466,6 +531,7 @@
     1. Logging click
 - Try/Catch Body Standalone
   - ❌
+
     ```C#
       try
       {
@@ -476,7 +542,9 @@
         //do something here
       }
     ```
+
   - ✔
+
     ```C#
       try
       {
@@ -493,7 +561,8 @@
       }
     ```
 
-### Classes
+## Classes
+
 - When to create a class  
   - New concept - Abstract or real-world
   - Low cohesion - Methods should relate
@@ -533,14 +602,19 @@
   - Too many pieces
 - Primitive Obsession
   - ❌
+
     ```C#
       private void SaveUser(string firstName, string lastName, string state, string zip, string eyeColor, string phone, string fax, string maidenName)
     ```
+
   - ✔
+
     ```C#
       private void SaveUser(User user)
     ```
+
 - Proximity Principle. Make code read top to bottom when possible. Keep related actions together
+
   ```C#
     private void ValidateRegistration()
     {
@@ -574,9 +648,11 @@
       return IsExceptionalOnPaper() || !ObviousRedFlags();
     }
   ```
+
 - Outline rule
   - Multiple layers of abstraction
   - Should read like a high-level outline
+
     ```C#
       Class
         MethodOne
@@ -590,7 +666,8 @@
           MethodTwoB
     ```
 
-### Resources
+## Resources
+
 - Steve McConnell - [stevemcconnell.com](https://stevemcconnell.com/)
 - Robert C. Martin - [blog.cleancoder.com](https://blog.cleancoder.com/)
 - Andrew Hunt David Thomas - [pragprog.com](https://pragprog.com/)
