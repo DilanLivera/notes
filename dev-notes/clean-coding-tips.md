@@ -666,6 +666,213 @@
           MethodTwoB
     ```
 
+## Comments
+
+- A necessity and a crutch
+  - Prefer expressive code over comments
+  - Use comments when code isn't sufficient
+- Comments to avoid
+  - Redundant
+  
+    ❌
+
+    ```csharp
+      int i = 1; // Set i = 1
+
+      var cory = new User(); //Instantiate a new user
+    
+      /// <summary>
+      /// Default Constructor
+      /// </summary>
+      public User()
+      {
+      }
+
+      /// <summary>
+      /// Calculates Total Charges
+      /// </summary>
+      private void CalculateTotalCharges()
+      {
+        //Total charges calculated here
+      }
+    ```
+
+  - Intent
+    - ❌
+
+      ```csharp
+        // Assure user’s account is deactivated.
+        if (user.Status == 2)
+      ```
+
+    - ✔
+
+      ```csharp
+        if (user.Status == Status.Inactive)
+      ```
+
+    - Clarify intent without commnts
+      - Improve function name
+      - Declare intermediate variable
+      - Declare a contant or enum
+      - Ectract conditional to function
+  - Apology
+    - Don't appologize
+    - Fix it before commit/merge
+    - Add a `TODO` marker comment if you must
+  - Warning
+  - Zombie code (Code which is commented. Refactoring tools ignore these code bits which make them not upto date.)
+    - Common causes
+      - Risk aversion
+      - Hoarding mentality
+    - Optimize the signal to noise ratio
+    - Ambiguity hinders debugging
+      - What did this section do?
+      - Was this accidentally commented?
+      - Who did this?
+      - Do I need to refactor this too?
+      - How does my  change impact this code?
+      - What if someone uncomments it later?
+    - Add noize to searches
+    - Code isn't **lost** anyway
+    - Kill zombie code
+    - About to comment out code? Ask:
+      - When whould this be uncommented?
+      - Can I just get it from source control later?
+      - Is this incomplete work that should be worked via a branch?
+      - Should this be toggled via configuration?
+      - Did I refactor out the need for this code?
+  - Divider
+
+    ❌
+
+    ```csharp
+      private void MyLongFunction()
+      {
+        // lots
+        // of
+        // code
+        // Start search for available concert tickets
+        // lots
+        // of
+        // concert
+        // search
+        // code
+        // End of concert ticket search
+        // lots
+        // more
+        // code
+      }
+    ```
+
+  - Brace tracker
+    - ❌
+
+      ```csharp
+        private void AuthenticateUsers() 
+        {
+          bool validLogin = false;
+          //deeply
+          //nested
+          //code
+          if (validLogin)
+          {
+          // lots
+          // of
+          // code
+          // here 
+          } // end user login
+          //even
+          //more code
+        }
+      ```
+
+    - ✔
+
+      ```csharp
+        private void AuthenticateUsers() 
+        {
+          bool validLogin = false;
+          //deeply
+          //nested
+          //code
+          if (validLogin)
+          {
+            LoginUser();
+          }
+          //even
+          //more code
+        }
+      ```
+
+  - Bloated header
+
+    ```csharp
+      //***************************************************
+      // Filename: Monolith.cs                            *
+      //                                                  *
+      // Author: Cory House                               *
+      // Created: 12/20/2019                              *
+      // Weather that day: Patchy fog, then snow          *
+      //                                                  *
+      // Summary                                          *
+      // This class does a great many things. To make it  *
+      // extra useful I placed pretty much all the app    *
+      // logic here. You wish your class was this         *
+      // powerful. Bwahhahha!                             *
+      //***************************************************
+    ```
+
+    - Avoid line endings
+    - Don't repeat yourself
+    - Follow conventions
+
+  - Defect log
+
+    ❌
+
+    ```csharp
+      // Defect #5274 DA 12/10/2010
+      // We weren't checking for null here
+      if (firstName != null)
+      {
+        //...
+      }
+    ```
+
+    - Change metadata belongs in source control
+    - A well written book isn't covered in author notes
+- To Do comments
+
+  ```csharp
+    // TODO Refactor out duplication
+
+    // HACK The API doesn't expose needed call yet.
+  ```
+
+  - Standardize
+  - Watch out
+    - May be an apology or warning comment in disguise
+    - Often ignored
+- Summary comments
+
+  ```csharp
+    // Encapsulates logic for calculating retiree benefits
+
+    // Generates custom newsletter emails
+  ```
+
+  - Describes intent at general level higher than the code
+  - Often useful to provide high level overview of classes
+  - Rish : Don't use to simply augment poor naming/code level intent
+- Documentation
+
+  ```csharp
+    // See microsoft.com/api for documentation
+  ```
+
+  - Useful when it can't be expressed in code
+
 ## Resources
 
 - Steve McConnell - [stevemcconnell.com](https://stevemcconnell.com/)
