@@ -102,6 +102,12 @@
 
 ## Persistent messages and durable queues
 
+## Definitions
+
+- ***Ready*** - A message is ***Ready*** when it is waiting to be processed.
+
+- ***Unacked*** - Consumer has promised to process them but has not acknowledged that they are processed. When the consumer crashed the queue knows which messages are to be delivered again when the consumer comes online. When you have multiple consumers the messages are distributed among them.
+
 ## Resources
 
 - [Part 1: RabbitMQ Best Practices](https://www.cloudamqp.com/blog/part1-rabbitmq-best-practice.html)
