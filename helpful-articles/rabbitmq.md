@@ -7,7 +7,7 @@
 
 ## To test Shovel Plugin locally
 
-- Install `rabbitmq_shovel` and `rabbitmq_shovel_management` plugins. 
+- Install `rabbitmq_shovel` and `rabbitmq_shovel_management` plugins.
 - Go to RabbitMQ dashboard
 - Go to Admin tab. You should see **Shovel Status** and **Shovel Management** in left side navigation bar.
 - Go to Shovel Management to create a shovel. Eg.
@@ -18,7 +18,7 @@
     - URI - `amqp://localhost:5672` and `failed.message.handling.subscriber`
 - Click Add shovel
 - Go to **Shovel Status** to check the status of the shovel. Eg. State == `running`
-- If there were messages in the `entity.details.payload.handler.failed.message` queue should be moved to the `failed.message.handling.subscriber` queue now.
+- If there were messages in the `entity.details.payload.handler.failed.message` queue, they should be moved to the `failed.message.handling.subscriber` queue now.
 
 ## Resources
 
