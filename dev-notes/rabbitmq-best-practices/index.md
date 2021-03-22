@@ -102,12 +102,78 @@
 
 ## Persistent messages and durable queues
 
+- If you cannot afford to lose any messages, make sure that your queue is declared as `durable` and that messages are sent with delivery mode `persistent`.
+- In order to avoid losing messages in the broker, you need to be prepared for broker restarts, broker hardware failure, or broker crashes. To ensure that messages and broker definitions survive restarts, ensure that they are on the disk. Messages, exchanges, and queues that are not durable and persistent will be lost during a broker restart.
+- Persistent messages are heavier with regard to performance, as they have to be written to disk. Keep in mind that lazy queues will have the same effect on performance, even though you are sending transient messages. For high performance, the best practice is to use transient messages.
+
+## TLS and AMQPS
+
+- You can connect to RabbitMQ over AMQPS, which is the AMQP protocol wrapped in TLS. TLS has a performance impact since all traffic has to be encrypted and decrypted. For maximum performance, we recommend using VPC peering instead as the traffic is private and isolated without involving the AMQP client/server.
+
+## Prefetch
+
+- From RabbitMQ.com
+  > “The goal is to keep the consumers saturated with work, but to minimize the client's buffer size so that more messages stay in Rabbit's queue and are thus available for new consumers or to just be sent out to consumers as they become free.”
+- The RabbitMQ default prefetch setting gives clients an unlimited buffer, meaning that RabbitMQ by default sends as many messages as it can to any consumer that looks ready to accept them. Sent messages are cached by the RabbitMQ client library (in the consumer) until processed. Prefetch limits how many messages the client can receive before acknowledging a message. All pre-fetched messages are removed from the queue and invisible to other consumers.
+- A too-small prefetch count may hurt performance since RabbitMQ is typically waiting to get permission to send more messages. The image below illustrates a long idling time. In the example, we have a QoS prefetch setting of one (1). This means that RabbitMQ won't send out the next message until after the round trip completes (deliver, process, acknowledge). Round-trip time in this picture is in total 125ms with a processing time of only 5ms.
+
+  ![alt text](./rabbitmq-prefetch-roundtime.jpg "RabbitMQ prefetch roundtime")
+
+- A large prefetch count, on the other hand, could take lots of messages off the queue and deliver to one single consumer, keeping the other consumers in an idling state.
+
+  ![alt text](./rabbitmq-prefetch-full.jpg "RabbitMQ prefetch with multiple clients")
+  
+- How to set correct prefetch value?
+  - For one single or few consumers processing messages quickly, prefetch many messages at once. Try to keep your client as busy as possible.
+  - If the processing time is same all the time and network behavior remains the same, simply take the total round trip time and divide by the processing time on the client for each message to get an estimated prefetch value.
+  - For many consumers and short processing time, a lower prefetch value is recommended. A too low value will keep the consumers idling a lot since they need to wait for messages to arrive. A too high value may keep one consumer busy, while other consumers are being kept in an idling state.
+  - For many consumers and/or long processing time, set the prefetch count to one (1) so that messages are evenly distributed among all your workers.
+  - A typical mistake is to have an unlimited prefetch, where one client receives all messages and runs out of memory and crashes, causing all the messages to be re-delivered.
+  - More information about RabbitMQ prefetch can be found in [Some queuing theory: throughput, latency and bandwidth](https://www.rabbitmq.com/blog/2012/05/11/some-queuing-theory-throughput-latency-and-bandwidth/)
+
+    ***Note: If client auto-ack’s messages, the prefetch value will have no effect.***
+
+## Routing (exchanges setup)
+
+- Direct exchanges are the fastest to use; many bindings mean that RabbitMQ has to take time to calculate where to send the message.
+
+## Plugins
+
+- Some plugins might be great, but they also consume a lot of CPU or may use a high amount of RAM. Because of this, they are not recommended for a production server. Disable plugins that are not in use.
+
+## Other
+
+- Remember to enable HA on new vhosts. Without an HA-policy, messages will not be synced between nodes.
+- Do not set the RabbitMQ Management statistics rate mode to detailed in production. Setting the RabbitMQ Management statistics rate mode to detailed has a serious performance impact and should not be used in production.
+- Make sure to use the latest recommended version of client libraries.
+- Stay up-to-date with the latest stable versions of RabbitMQ and Erlang.
+- TTL and dead lettering can generate unforeseen negative performance effects, such as
+  - A queue that is declared with the `x-dead-letter-exchange` property will send messages which are either rejected, nacked or expired (with TTL) to the specified dead-letter-exchange. If you specify `x-dead-letter-routing-key` the routing key of the message will be changed when dead lettered.
+  - By declaring a queue with the `x-message-ttl` property, messages will be discarded from the queue if they haven't been consumed within the time specified.
+- To get optimal performance, keep queues as short as possible. Longer queues require more processing overhead. Queues are recommended to always stay around 0 for optimal performance.
+- If the application often gets hit by spikes of messages, setting a max-length on the queue is recommended. This keeps the queue short by discarding messages from the head of the queue so that it never gets larger than the max-length setting.
+- Remove the policy for lazy queues. Lazy queues are queues where the messages are automatically stored to disk, thereby minimizing the RAM usage, but extending the throughput time. Messages are only loaded into memory when they are needed.
+- Persistent messages are written to disk as soon as they reach the queue, which affects throughput. Use transient messages for the fastest throughput.
+- Queues are single-threaded in RabbitMQ, and one queue can handle up to about 50 thousand messages. You will achieve better throughput on a multi-core system, have multiple queues and consumers and have as many queues as cores on the underlying node(s).
+
+  The RabbitMQ management interface collects and calculates metrics for every queue in the cluster. This might slow down the server if you have thousands upon thousands of active queues and consumers. The CPU and RAM usage may also be affected negatively if you have too many queues.
+- Queue performance is limited to one CPU core. Therefore, to get better performance, split your queues into different cores, and into different nodes, if you have a RabbitMQ cluster.
+
+  RabbitMQ queues are bound to the node where they were first declared. Even if you create a cluster of RabbitMQ brokers, all messages routed to a specific queue will go to the node where that queue lives. You can manually split your queues evenly between nodes, but the downside is remembering where your queue is located.
+
+  Recommend two plugins that will help you if you have multiple nodes or a single node cluster with multiple cores:
+  - Consistent hash exchange plugin
+  - RabbitMQ sharding plugin
+- Acknowledgment and publish confirms have a performance impact; for the fastest possible throughput, manual acks should be disabled.
+- One node will give you the highest throughput compared to an HA cluster setup. Messages and queues are not mirrored to other nodes.
+
 ## Definitions
 
 - ***Ready*** - A message is ***Ready*** when it is waiting to be processed.
-
 - ***Unacked*** - Consumer has promised to process them but has not acknowledged that they are processed. When the consumer crashed the queue knows which messages are to be delivered again when the consumer comes online. When you have multiple consumers the messages are distributed among them.
+- **Prefetch** - The prefetch value is used to specify how many messages are being sent to the consumer at the same time. It is used to get as much out of your consumers as possible.
 
-## Resources
+## Credits
 
 - [Part 1: RabbitMQ Best Practices](https://www.cloudamqp.com/blog/part1-rabbitmq-best-practice.html)
+- [Part 2: RabbitMQ Best Practice for High Performance (High Throughput)](https://www.cloudamqp.com/blog/part2-rabbitmq-best-practice-for-high-performance.html)
