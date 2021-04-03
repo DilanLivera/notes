@@ -1,4 +1,4 @@
-# Debugger/Diagnostics Tips & Tricks in Visual Studio 2019
+# Debugger/Diagnostics Tips & Tricks in Visual Studio
 
 ## 2019
 
