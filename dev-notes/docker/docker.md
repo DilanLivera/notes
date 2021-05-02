@@ -1,8 +1,8 @@
 # Docker
 
-## Building Images
+## Images
 
-- Create a docker file. A Dockerfile contains instructions for building an image. Some of them are
+- Images are built using a docker file. A Dockerfile contains instructions for building an image. Some of them are
   - `FROM` : Specify the base image which we use to built on top of. [docker docs - `FROM`](https://docs.docker.com/engine/reference/builder/#from)
 
     ```docker
@@ -63,15 +63,15 @@
     ENTRYPOINT ["top", "-b"]
     ```
 
-- Run `docker build -t [name-of-the-image] .` command with the name of the image. This will build an image with the given image name.
-
+- Build an image with `docker build -t [name-of-the-image] .` command
+  
   ```powershell
   docker build -t react-app .
   ```
 
   `--tag` or `-t` : Name and optionally a tag in the ***name:tag*** format
 
-- Run `docker run -it [name-of-the-image]`  command with the name of the image. This will start a container with the given image name in interactive mode.
+- Start a container with the given image name in interactive mode with `docker run -it [name-of-the-image]` command
 
   ```powershell
   docker run -it react-app
@@ -109,6 +109,16 @@
   ```powershell
   docker image load -i react-app.tar
   ```
+
+## Other Docker CLI Commands
+
+- `docker version`
+- `docker pull [image-name]`
+- `docker imgages` or `docker image ls`
+- `docker-compose up`
+- `docker-compose down --rmi -all`
+- `docker image prune` - Removes all dangling images.
+- `docker container prune` - Removes all stopped containers.
 
 ## Credits
 
