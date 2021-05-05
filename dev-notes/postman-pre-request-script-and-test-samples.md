@@ -1,4 +1,27 @@
-# Postman Test Samples
+# Postman Pre-Request Scripts and Test Samples
+
+## Pre-Request Scripts
+
+- Check request header values exists
+
+  ```javascript
+  const requiredHeaders = new Set(['X-Transaction-ID', 'X-Session-ID', 'X-Device-ID','X-User-ID']);
+  let missingHeaders = [];
+
+  requiredHeaders.forEach((header) => {
+      let value = pm.request.headers.get(header);
+
+      if(!value)
+      {
+          missingHeaders.push(header);
+      }
+  });
+
+  if(missingHeaders.length > 0)
+  {
+      throw Error("Missing reuired header/s : " + missingHeaders.toString());
+  }
+  ```
 
 ## Tests
 
