@@ -22,6 +22,10 @@
   - [NuGet package](https://www.nuget.org/packages/Serilog.Enrichers.Thread)
   - [GitHub Repository](https://github.com/serilog/serilog-enrichers-thread)
 
+- Serilog.Expressions - An embeddable mini-language for filtering, enriching, and formatting Serilog events, ideal for use with JSON or XML configuration.
+  - [NuGet package](https://www.nuget.org/packages/Serilog.Expressions)
+  - [GitHub Repository](https://github.com/serilog/serilog-expressions)
+
 - Serilog.Sinks.Console - ***Note: This is included in the Serilog.AspNetCore package***
   - [NuGet package](https://www.nuget.org/packages/serilog.sinks.console)
   - [GitHub Repository](https://github.com/serilog/serilog-sinks-console)
