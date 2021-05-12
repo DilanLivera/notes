@@ -74,18 +74,21 @@
       public static IHostBuilder CreateHostBuilder(string[] args)
       {
           return Host.CreateDefaultBuilder(args)
-              .UseSerilog(SetupSerilog)
+              .UseSerilog(ConfigureLogger)
               .ConfigureWebHostDefaults(webBuilder =>
               {
                   webBuilder.UseStartup<Startup>();
               });
       }
 
-      public static void SetupSerilog(
+      public static void ConfigureLogger(
           HostBuilderContext context, 
           IServiceProvider serviceProvider, 
           LoggerConfiguration loggerConfiguration)
       {
+          const string traceLogsFromSerilogRequestLoggingMiddleware = 
+              "Contains(SourceContext, 'Serilog.AspNetCore.RequestLoggingMiddleware') and (@l = 'Verbose')";
+          const string consoleOutputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
           loggerConfiguration
               .ReadFrom.Configuration(context.Configuration)
               .ReadFrom.Services(serviceProvider)
@@ -93,17 +96,19 @@
               .Enrich.WithMachineName()
               .Enrich.FromLogContext()
               .WriteTo.Debug()
+              .Filter.ByExcluding(expression: traceLogsFromSerilogRequestLoggingMiddleware)
               .WriteTo.Console(
-                  outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}",
+                  outputTemplate: consoleOutputTemplate,
                   theme: AnsiConsoleTheme.Code)
               .WriteTo.Async(ConfigureAsyncWrapper);
       }
 
       public static void ConfigureAsyncWrapper(LoggerSinkConfiguration loggerSinkConfiguration)
       {
+          const string logFilePath = "logs/log.txt";
           loggerSinkConfiguration.File(
               formatter: new CompactJsonFormatter(),
-              path: "logs/log.txt",
+              path: logFilePath,
               rollingInterval: RollingInterval.Day,
               buffered: true);
       }
