@@ -1,4 +1,4 @@
-# Setup Serilog With .Net Core
+# Setup Serilog in .Net Core
 
 ## Packages
 

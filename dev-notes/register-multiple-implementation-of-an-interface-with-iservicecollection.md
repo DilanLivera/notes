@@ -1,7 +1,8 @@
-## How to register multiple implementation of an interface with `IServiceCollection`
+# Register multiple implementation of an interface with `IServiceCollection`
 
-### Create the interface
-```C#
+## Create the interface
+
+```csharp
     public interface IEnricher
     {
         bool CanEnrich(SqsMessage message);
@@ -10,8 +11,9 @@
     }
 ```
 
-### Create the implementations of the interface
-```C#
+## Create the implementations of the interface
+
+```csharp
     public class LocationEnricher : IEnricher
     {
         private readonly ILocationLookup _locationLookup;
@@ -47,8 +49,9 @@
     }
 ```
 
-### Register the services
-```C#
+## Register the services
+
+```csharp
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton<IEnricher, LocationEnricher>();
@@ -56,8 +59,9 @@
     }
 ```
 
-### Use the service/s
-```C#
+## Use the service/s
+
+```csharp
     public class MessageProcessor
     {
         private readonly IEnumerable<IEnricher> _enrichers;
@@ -80,5 +84,6 @@
     }
 ```
 
-### Links 
+## Credits
+
 - [Steve Gordon - ASP.Net Core dependency injection - Registering multiple implementations of an interface](https://www.stevejgordon.co.uk/asp-net-core-dependency-injection-registering-multiple-implementations-interface)

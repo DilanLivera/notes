@@ -1,7 +1,8 @@
-## How to test code that uses Entity Framework Core
+# Write tests when using Entity Framework Core
 
-### How to mock the `DBContext` using in memory database
-```C#
+## Mock the `DBContext` using in memory database
+
+```csharp
 using Microsoft.Data.Sqlite;
 
 var options = new DbContextOptionsBuilder<CourseContext>()
@@ -12,10 +13,12 @@ using (var context = new CourseContext(options))
 {
 }
 ```
-*Note - The InMemory database provider isn’t a relation database (i.e. - No referential integrity checks, No DefaultValueSql(string), No TimeStampor IsRowVersion, etc)*
 
-### How to mock the `DBContext` using SQLite
-```C#
+***Note - The InMemory database provider isn’t a relation database (i.e. - No referential integrity checks, No DefaultValueSql(string), No TimeStampor IsRowVersion, etc)***
+
+## Mock the `DBContext` using SQLite
+
+```csharp
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,11 +39,14 @@ using (var context = new CourseContext(options))
     context.Database.EnsureCreated();
 }
 ```
-*Note - The SQLite database provider provides referential integrity*
 
-### How to set up Entity framework Core logging in unit testing
+***Note - The SQLite database provider provides referential integrity***
+
+## Set up Entity framework Core logging in unit testing
+
 1. Create a logger by implementing the `ILogger` interface
-    ```C#
+
+    ```csharp
     using Microsoft.Extensions.Logging;
 
     internal class EFCoreLogger : ILogger
@@ -74,7 +80,8 @@ using (var context = new CourseContext(options))
     ```
 
 2. Create a loggr provider by implementing the `ILoggerProvider` interface
-    ```C#
+
+    ```csharp
     using Microsoft.Extensions.Logging;
 
     internal class LogToActionLoggerProvider : ILoggerProvider
@@ -103,7 +110,8 @@ using (var context = new CourseContext(options))
     ```
 
 3. Use `UseLoggerFactory` method on `DbContextOptionsBuilder` to add a logger factory with the LoggerProvider created before
-    ```C#
+
+    ```csharp
     public class AuthorRepositoryTests
     {
         private readonly ITestOutputHelper _output;
@@ -140,114 +148,117 @@ using (var context = new CourseContext(options))
     }
     ```
 
-### Other things to remember
+## Other things to remember
 
-- Give an unique name to in memory database in each test 
+- Give an unique name to in memory database in each test
 
 - Improve tests by using multiple DB context instance
-    ```C#
-    [Fact]
-    public void AddAuthor_AuthorWithoutCountryId_AuthorHasBEAsCountryId()
-    {
-        // Arrange
-        var options = new DbContextOptionsBuilder<CourseContext>()
-            .UseInMemoryDatabase($"CourseDatabaseForTesting{Guid.NewGuid()}")
-            .Options;
 
-        using (var context = new CourseContext(options))
-        {
-            context.Countries.Add(new Entities.Country()
-            {
-                Id = "BE",
-                Description = "Belgium"
-            });
+  ```csharp
+  [Fact]
+  public void AddAuthor_AuthorWithoutCountryId_AuthorHasBEAsCountryId()
+  {
+      // Arrange
+      var options = new DbContextOptionsBuilder<CourseContext>()
+          .UseInMemoryDatabase($"CourseDatabaseForTesting{Guid.NewGuid()}")
+          .Options;
 
-            context.SaveChanges();
-        }
+      using (var context = new CourseContext(options))
+      {
+          context.Countries.Add(new Entities.Country()
+          {
+              Id = "BE",
+              Description = "Belgium"
+          });
 
-        using (var context = new CourseContext(options))
-        {
-            var authorRepository = new AuthorRepository(context);
-            var authorToAdd = new Author()
-            {
-                FirstName = "Kevin",
-                LastName = "Dockx",
-                Id = Guid.Parse("d84d3d7e-3fbc-4956-84a5-5c57c2d86d7b")
-            };
+          context.SaveChanges();
+      }
 
-            // Act
-            authorRepository.AddAuthor(authorToAdd);
-            authorRepository.SaveChanges();
-        }
+      using (var context = new CourseContext(options))
+      {
+          var authorRepository = new AuthorRepository(context);
+          var authorToAdd = new Author()
+          {
+              FirstName = "Kevin",
+              LastName = "Dockx",
+              Id = Guid.Parse("d84d3d7e-3fbc-4956-84a5-5c57c2d86d7b")
+          };
 
-        using (var context = new CourseContext(options))
-        {
-            // Assert
-            var authorRepository = new AuthorRepository(context);
-            var addedAuthor = authorRepository.GetAuthor(
-                Guid.Parse("d84d3d7e-3fbc-4956-84a5-5c57c2d86d7b"));
-            Assert.Equal("BE", addedAuthor.CountryId);
-        }
-    }
-    ```
+          // Act
+          authorRepository.AddAuthor(authorToAdd);
+          authorRepository.SaveChanges();
+      }
+
+      using (var context = new CourseContext(options))
+      {
+          // Assert
+          var authorRepository = new AuthorRepository(context);
+          var addedAuthor = authorRepository.GetAuthor(
+              Guid.Parse("d84d3d7e-3fbc-4956-84a5-5c57c2d86d7b"));
+          Assert.Equal("BE", addedAuthor.CountryId);
+      }
+  }
+  ```
 
 - When using multiple DB context instances, we only need to open the connection and ensure database is created once. This is because connection is reused between the contexts. So it stays open until it goes out of scope, which is at the end of the test. We only need to ensure database is created once because database is reused.
-    ```C#
-    [Fact]
-    public void AddAuthor_AuthorWithoutCountryId_AuthorHasBEAsCountryId()
-    {
-        // Arrange
-        var connectionStringBuilder = new SqliteConnectionStringBuilder 
-        { 
-            DataSource = ":memory:" 
-        };
 
-        var connection = new SqliteConnection(connectionStringBuilder.ToString());
+  ```csharp
+  [Fact]
+  public void AddAuthor_AuthorWithoutCountryId_AuthorHasBEAsCountryId()
+  {
+      // Arrange
+      var connectionStringBuilder = new SqliteConnectionStringBuilder 
+      { 
+          DataSource = ":memory:" 
+      };
 
-        var options = new DbContextOptionsBuilder<CourseContext>()
-            .UseSqlite(connection)
-            .Options;
+      var connection = new SqliteConnection(connectionStringBuilder.ToString());
 
-        using (var context = new CourseContext(options))
-        {
-            context.Database.OpenConnection();
-            context.Database.EnsureCreated();
+      var options = new DbContextOptionsBuilder<CourseContext>()
+          .UseSqlite(connection)
+          .Options;
 
-            context.Countries.Add(new Entities.Country()
-            {
-                Id = "BE",
-                Description = "Belgium"
-            });
+      using (var context = new CourseContext(options))
+      {
+          context.Database.OpenConnection();
+          context.Database.EnsureCreated();
 
-            context.SaveChanges();
-        }
+          context.Countries.Add(new Entities.Country()
+          {
+              Id = "BE",
+              Description = "Belgium"
+          });
 
-        using (var context = new CourseContext(options))
-        {
-            var authorRepository = new AuthorRepository(context);
-            var authorToAdd = new Author()
-            {
-                FirstName = "Kevin",
-                LastName = "Dockx",
-                Id = Guid.Parse("d84d3d7e-3fbc-4956-84a5-5c57c2d86d7b")
-            };
+          context.SaveChanges();
+      }
 
-            // Act
-            authorRepository.AddAuthor(authorToAdd);
-            authorRepository.SaveChanges();
-        }
+      using (var context = new CourseContext(options))
+      {
+          var authorRepository = new AuthorRepository(context);
+          var authorToAdd = new Author()
+          {
+              FirstName = "Kevin",
+              LastName = "Dockx",
+              Id = Guid.Parse("d84d3d7e-3fbc-4956-84a5-5c57c2d86d7b")
+          };
 
-        using (var context = new CourseContext(options))
-        {
-            // Assert
-            var authorRepository = new AuthorRepository(context);
-            var addedAuthor = authorRepository.GetAuthor(
-                Guid.Parse("d84d3d7e-3fbc-4956-84a5-5c57c2d86d7b"));
-            Assert.Equal("BE", addedAuthor.CountryId);
-        }
-    }
-    ```
+          // Act
+          authorRepository.AddAuthor(authorToAdd);
+          authorRepository.SaveChanges();
+      }
 
-### Links
+      using (var context = new CourseContext(options))
+      {
+          // Assert
+          var authorRepository = new AuthorRepository(context);
+          var addedAuthor = authorRepository.GetAuthor(
+              Guid.Parse("d84d3d7e-3fbc-4956-84a5-5c57c2d86d7b"));
+          Assert.Equal("BE", addedAuthor.CountryId);
+      }
+  }
+  ```
+
+## Credits
+
 - [Pluralsight - Testing with EF Core by Kevin Dockx](https://app.pluralsight.com/library/courses/ef-core-testing/table-of-contents)
 - [Microsoft Docs - Testing code that uses EF Core](https://docs.microsoft.com/en-us/ef/core/testing/)

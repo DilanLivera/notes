@@ -1,4 +1,4 @@
-# How to setup Elastic APM in .Net Core
+# Setup Elastic APM in .Net Core
 
 - Add following package in your project. Or whatever version is latest.
 

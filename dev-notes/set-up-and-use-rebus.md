@@ -1,4 +1,4 @@
-# How to set up and use Rebus
+# Set up and use Rebus
 
 ## Configurations
 

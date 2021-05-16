@@ -1,4 +1,4 @@
-# Work with events in .Net Core
+# Events in .Net Core
 
 ```csharp
 using System;
