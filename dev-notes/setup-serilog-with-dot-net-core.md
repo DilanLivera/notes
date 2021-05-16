@@ -38,7 +38,11 @@
   - [NuGet package](https://www.nuget.org/packages/serilog.settings.configuration)
   - [GitHub Repository](https://github.com/serilog/serilog-settings-configuration)
 
-## Setup
+- Serilog.Extensions.Hosting - ***Note: This is included in the Serilog.AspNetCore package***
+  - [NuGet package](https://www.nuget.org/packages/Serilog.Extensions.Hosting)
+  - [GitHub Repository](https://github.com/serilog/serilog-extensions-hosting)
+
+## Setup for ASP.Net Core Web Application
 
   Sets Seriog as the logging provider to the host.
 
@@ -105,7 +109,7 @@
 
       public static void ConfigureAsyncWrapper(LoggerSinkConfiguration loggerSinkConfiguration)
       {
-          const string logFilePath = "logs/log.txt";
+          const string logFilePath = "Logs/log-.txt";
           loggerSinkConfiguration.File(
               formatter: new CompactJsonFormatter(),
               path: logFilePath,
