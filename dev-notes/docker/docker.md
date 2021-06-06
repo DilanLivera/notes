@@ -209,6 +209,163 @@
   docker run -d -p 5000:80 --name weatherapi -v $(pwd):/app weatherapi:dev
   ```
 
+## Multi-container applications
+
+- Set the version of the compose tool to use to validate the schema by using `version` keyword
+
+  ```yaml
+  version: "3.8"
+  ```
+
+- Computing components of an application are defined as `services`
+
+  ```yaml
+  version: "3.8"
+  services:
+    web:
+      image: web
+
+    mock-backend:
+      image: backend
+      profiles: ["dev"]
+      depends_on:
+        - db
+
+    db:
+      image: mysql
+      profiles: ["dev"]
+  ```
+
+- Build or rebuild services in the compose file using `docker-compose build`. Services are built once and then tagged, by default as `folder_service`. Eg. `weatherapp_db`
+  - Add `--no-cache` option to not use cache when building the image.
+  - Add `--pull` option to pull a newer version of the image.
+
+- Use `docker-compose up` command to build, (re)create, start, and attach to containers for a service.
+  - Add `--build` option to build images before starting containers. When using this option we don't need to run the `docker-compose build` command before using the `docker-compose up`.
+  - Add `-d` or `--detach` option to run containers in the background in detached mode.
+  - Use `docker logs [container-id] -f` command to follow the logs of of an container when using detach mode.
+
+- List all the containers relevent to the application by using `docker-compose ps`
+
+- Stop containers and removes containers, networks, volumes, and images created by `up` command using `docker-compose down`
+  - Add `--rmi type` option to remove the images. Type must be either `all`(Remove all images used by any service.) or `local`(Remove only images that don't have a custom tag set by the `image` field).
+
+- To Run the db migrations, we need to update override the command in the docker file in the application(eg. backend or api application). This is done using the `command` keyword in the compose file.
+
+  ```yaml
+  version: "3.8"
+
+  services:
+    frontend:
+      depends_on: 
+        - backend
+      build: ./frontend
+      ports:
+        - 3000:3000
+      volumes: 
+        - ./frontend:/app
+
+    backend: 
+      depends_on: 
+        - db
+      build: ./backend
+      ports: 
+        - 3001:3001
+      environment: 
+        DB_URL: mongodb://db/vidly
+      volumes: 
+        - ./backend:/app
+      # 👇 command runs the db migrations and starts the application. 
+      # Problem with this is db container might not be ready(depends_on option only wait until the container start) due to slow start.
+      # To solve this we could use a script.
+      # For more information goto https://docs.docker.com/compose/startup-order/
+      # Use a waiting script with the command. eg. ./wait-for db:27017 && migrate-mongo up && npm start
+      command: migrate-mongo up && npm start
+
+    db:
+      image: mongo:4.0-xenial
+      ports:
+        - 27017:27017
+      volumes:
+        - vidly:/data/db
+
+  volumes:
+    vidly:
+  ```
+
+  Or you could create a shell script with all the commands and run the script.
+
+  ```shell
+  # docker-entrypoint.sh
+  # This should be in the application folder. eg. backend/docker-entrypoint.sh
+  echo "Waiting for MongoDB to start..."
+  ./wait-for db:27017 
+
+  echo "Migrating the databse..."
+  npm run db:up 
+
+  echo "Starting the server..."
+  npm start 
+  ```
+
+  ```yaml
+    # removed for brevity
+    backend: 
+      depends_on: 
+        - db
+      build: ./backend
+      ports: 
+        - 3001:3001
+      environment: 
+        DB_URL: mongodb://db/vidly
+      volumes: 
+        - ./backend:/app
+      command: ./docker-entrypoint.sh
+
+    # removed for brevity
+  ```
+
+- To Run the tests, we can create another service in the compose file.
+
+  ```yaml
+  version: "3.8"
+
+  services:
+    frontend:
+      depends_on: 
+        - backend
+      build: ./frontend
+      volumes: 
+        - ./frontend:/app
+      ports:
+        - 3000:3000
+
+    frontend-tests:
+      image: applicationName_frontend # eg. vidly_web
+      volumes: 
+        - ./frontend:/app
+      command: npm test
+
+    backend: 
+      depends_on: 
+        - db
+      build: ./backend
+      ports: 
+        - 3001:3001
+      environment: 
+        DB_URL: mongodb://db/vidly
+
+    db:
+      image: mongo:4.0-xenial
+      ports:
+        - 27017:27017
+      volumes:
+        - vidly:/data/db
+
+  volumes:
+    vidly:
+  ```
+
 ## Other Docker CLI Commands
 
 - `docker version`
@@ -218,6 +375,9 @@
 - `docker-compose down --rmi -all`
 - `docker image prune` - Removes all dangling images.
 - `docker container prune` - Removes all stopped containers.
+- `docker container rm -f $(docker container ls -aq)` - Removes all(stopped and running) the containers.
+- `docker image rm -f $(docker image ls -aq)` - Removes all(used and unused) the immages.
+- `docker network ls` - Lists all the docker networks.
 
 ## Credits
 
@@ -229,3 +389,6 @@
 - [Use the Docker command line](https://docs.docker.com/engine/reference/commandline/cli/)
 - [Dockerfile reference](https://docs.docker.com/engine/reference/builder/)
 - [Docker Samples](https://docs.docker.com/samples/)
+- [docker-compose CLI reference](https://docs.docker.com/compose/reference/)
+- [Compose file version 3 reference](https://docs.docker.com/compose/compose-file/compose-file-v3/#volumes-for-services-swarms-and-stack-files)
+- [The Compose file Specification](https://github.com/compose-spec/compose-spec/blob/master/spec.md#services-top-level-element)
