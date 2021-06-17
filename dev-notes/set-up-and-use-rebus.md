@@ -228,6 +228,75 @@ Provides configuration extensions that allow for easily hooking into Rebus in va
           });
   ```
 
+## Pipelines
+
+- Create a step
+
+  ```csharp
+  public class LogContextProperty
+  {
+      public const string TransactionId = "TransactionId";
+  }
+
+  public class RebusMessageContextHeaderProperty
+  {
+      public const string TransactionId = "TransactionId";
+  }
+
+  public class EnrichSerilogLogContextStep : IIncomingStep
+  {
+      public async Task Process(IncomingStepContext context, Func<Task> next)
+      {
+          // We could get the properties from the message also
+          //var message = context.Load<Message>();
+
+          var transactionId = MessageContext.Current.GetHeaderPropertyValue(RebusMessageContextHeaderProperty.TransactionId);
+
+          using (LogContext.PushProperty(LogContextProperty.TransactionId, transactionId))
+          {
+              await next();
+          }
+      }
+  }
+  ```
+
+- create an extension method to decorate `IPipeline` with a `PipelineStepInjector`
+
+  ```csharp
+  public static class RebusOptionsConfigurerExtensions
+  {
+      public static void EnrichSerilogLogContext(this OptionsConfigurer configurer)
+      {
+          configurer.Decorate<IPipeline>(resolutionContext =>
+          {
+              IPipeline pipeline = resolutionContext.Get<IPipeline>();
+
+              var enrichLogContextStep = new EnrichSerilogLogContextStep();
+
+              return new PipelineStepInjector(pipeline)
+                  .OnReceive(enrichLogContextStep, PipelineRelativePosition.Before, typeof(DeserializeIncomingMessageStep));
+          });
+      }
+  }
+  ```
+
+  ```csharp
+  services.AddRebus((rebusConfigurer, serviceProvider) =>
+  {
+      // removed for brevity
+
+      rebusConfigurer.Options(configurer =>
+      {
+          // removed for brevity
+          configurer.EnrichSerilogLogContext();
+      });
+
+      // removed for brevity
+
+      return rebusConfigurer;
+  });
+  ```
+
 ## Warnings
 
 - [Automatic retries and error handling (from Rebus wiki)](https://github.com/rebus-org/Rebus/wiki/Automatic-retries-and-error-handling#a-word-of-warning)
@@ -236,7 +305,8 @@ Provides configuration extensions that allow for easily hooking into Rebus in va
 
   Moreover, some transports might limit the amount of information that they include in the message headers. E.g. the Azure Service Bus transport will limit the size of each header value to around 16k characters because of a limitation in the underlying transport.
 
-## Resources
+## Credits
 
 - [Rebus wiki - Fail fast on certain exception types](https://github.com/rebus-org/Rebus/wiki/Fail-fast-on-certain-exception-types)
 - [Rebus wiki - Automatic retries and error handling](https://github.com/rebus-org/Rebus/wiki/Automatic-retries-and-error-handling)
+- [Rebus wiki - Extensibility](https://github.com/rebus-org/Rebus/wiki/Extensibility)
