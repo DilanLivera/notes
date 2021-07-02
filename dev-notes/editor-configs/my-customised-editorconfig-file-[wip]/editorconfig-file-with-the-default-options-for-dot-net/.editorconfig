@@ -1,0 +1,389 @@
+# Remove the line below if you want to inherit .editorconfig settings from higher directories
+root = true
+
+# All files
+[*]
+end_of_line = lf
+indent_style = space
+charset = utf-8
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# YAML files
+[*.{yml,yaml}]
+indent_size = 2
+
+# Markdown files
+[*.md]
+trim_trailing_whitespace = false
+
+# C# files
+[*.cs]
+
+# Indentation and spacing
+# indent_size = 4
+# indent_style = space
+
+# New line preferences
+# end_of_line = crlf
+# insert_final_newline = false
+
+# Organize usings
+# dotnet_separate_import_directive_groups = false
+dotnet_sort_system_directives_first = true
+# file_header_template = unset
+
+# this. and Me. preferences
+# Don't use this. qualifier
+dotnet_style_qualification_for_event = false:error
+dotnet_style_qualification_for_field = false:error
+dotnet_style_qualification_for_method = false:error
+dotnet_style_qualification_for_property = false:error
+
+# Language keywords vs BCL types preferences
+# use int x = .. over Int32
+dotnet_style_predefined_type_for_locals_parameters_members = true:error
+# use int.MaxValue over Int32.MaxValue
+dotnet_style_predefined_type_for_member_access = true:error
+
+# Parentheses preferences
+# dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:silent
+# dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:silent
+# dotnet_style_parentheses_in_other_operators = never_if_unnecessary:silent
+# dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:silent
+
+# Modifier preferences
+# dotnet_style_require_accessibility_modifiers = for_non_interface_members:silent
+
+# Expression-level preferences
+dotnet_style_coalesce_expression = true:error
+dotnet_style_collection_initializer = ttrue:error
+dotnet_style_explicit_tuple_names = true:error
+dotnet_style_null_propagation = true:error
+dotnet_style_object_initializer = true:error
+# dotnet_style_operator_placement_when_wrapping = beginning_of_line
+# dotnet_style_prefer_auto_properties = true:silent
+# dotnet_style_prefer_compound_assignment = true:suggestion
+# dotnet_style_prefer_conditional_expression_over_assignment = true:silent
+# dotnet_style_prefer_conditional_expression_over_return = true:silent
+# dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
+# dotnet_style_prefer_inferred_tuple_names = true:suggestion
+# dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
+# dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
+# dotnet_style_prefer_simplified_interpolation = true:suggestion
+
+# Field preferences
+# dotnet_style_readonly_field = true:suggestion
+
+# Parameter preferences
+# dotnet_code_quality_unused_parameters = all:suggestion
+
+# Suppression preferences
+# dotnet_remove_unnecessary_suppression_exclusions = none
+
+#### C# Coding Conventions ####
+
+# var preferences
+csharp_style_var_elsewhere = false:error
+csharp_style_var_for_built_in_types = true:error
+csharp_style_var_when_type_is_apparent = true:error
+
+# Expression-bodied members
+csharp_style_expression_bodied_accessors = true:error
+csharp_style_expression_bodied_constructors = false:error
+csharp_style_expression_bodied_indexers = true:error
+# csharp_style_expression_bodied_lambdas = true:silent
+# csharp_style_expression_bodied_local_functions = false:silent
+csharp_style_expression_bodied_methods = true:error
+csharp_style_expression_bodied_operators = true:error
+csharp_style_expression_bodied_properties = true:error
+
+# Pattern matching preferences
+csharp_style_pattern_matching_over_as_with_null_check = true:error
+csharp_style_pattern_matching_over_is_with_cast_check = true:error
+# csharp_style_prefer_not_pattern = true:suggestion
+# csharp_style_prefer_pattern_matching = true:silent
+# csharp_style_prefer_switch_expression = true:suggestion
+
+# Null-checking preferences
+csharp_style_conditional_delegate_call = false:error
+
+# Modifier preferences
+# csharp_prefer_static_local_function = true:suggestion
+# csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:silent
+
+# Code-block preferences
+csharp_prefer_braces = true:error
+csharp_prefer_simple_using_statement = true:suggestion
+
+# Expression-level preferences
+# csharp_prefer_simple_default_expression = true:suggestion
+# csharp_style_deconstructed_variable_declaration = true:suggestion
+csharp_style_inlined_variable_declaration = true:error
+# csharp_style_pattern_local_over_anonymous_function = true:suggestion
+# csharp_style_prefer_index_operator = true:suggestion
+# csharp_style_prefer_range_operator = true:suggestion
+# Disallow throw expressions.
+csharp_style_throw_expression = true:error
+# csharp_style_unused_value_assignment_preference = discard_variable:suggestion
+# csharp_style_unused_value_expression_statement_preference = discard_variable:silent
+
+# 'using' directive preferences
+# csharp_using_directive_placement = inside_namespace:silent
+
+#### C# Formatting Rules ####
+
+# New line preferences
+csharp_new_line_before_catch = true
+csharp_new_line_before_else = true
+csharp_new_line_before_finally = true
+csharp_new_line_before_members_in_anonymous_types = true
+csharp_new_line_before_members_in_object_initializers = true
+csharp_new_line_before_open_brace = all
+csharp_new_line_between_query_expression_clauses = true
+
+# Indentation preferences
+csharp_indent_block_contents = true
+csharp_indent_braces = false
+csharp_indent_case_contents = true
+csharp_indent_case_contents_when_block = true
+csharp_indent_labels = no_change
+csharp_indent_switch_labels = true
+
+# Space preferences
+csharp_space_after_cast = true
+csharp_space_after_colon_in_inheritance_clause = true
+csharp_space_before_colon_in_inheritance_clause = true
+csharp_space_after_comma = true
+csharp_space_before_comma = false
+csharp_space_after_dot = false
+csharp_space_before_dot = false
+csharp_space_after_keywords_in_control_flow_statements = true
+csharp_space_after_semicolon_in_for_statement = true
+csharp_space_before_semicolon_in_for_statement = false
+csharp_space_around_binary_operators = before_and_after
+csharp_space_around_declaration_statements = do_not_ignore
+csharp_space_before_open_square_brackets = false
+csharp_space_between_empty_square_brackets = false
+csharp_space_between_method_call_empty_parameter_list_parentheses = false
+csharp_space_between_method_call_name_and_opening_parenthesis = false
+csharp_space_between_method_call_parameter_list_parentheses = false
+csharp_space_between_method_declaration_empty_parameter_list_parentheses = false
+csharp_space_between_method_declaration_name_and_open_parenthesis = false
+csharp_space_between_method_declaration_parameter_list_parentheses = false
+csharp_space_between_parentheses = none
+csharp_space_between_square_brackets = false
+
+# Wrapping preferences
+csharp_preserve_single_line_blocks = false
+csharp_preserve_single_line_statements = false
+
+#### Naming styles ####
+
+# Naming rules
+
+dotnet_naming_symbols.private_field_symbol.applicable_kinds = field
+dotnet_naming_symbols.private_field_symbol.applicable_accessibilities = private
+dotnet_naming_style.private_field_style.capitalization = camel_case
+dotnet_naming_rule.private_fields_are_camel_case.severity = error
+dotnet_naming_rule.private_fields_are_camel_case.symbols = private_field_symbol
+dotnet_naming_rule.private_fields_are_camel_case.style = private_field_style
+
+dotnet_naming_symbols.non_private_field_symbol.applicable_kinds = field
+dotnet_naming_symbols.non_private_field_symbol.applicable_accessibilities = public,internal,friend,protected,protected_internal,protected_friend
+dotnet_naming_style.non_private_field_style.capitalization = pascal_case
+dotnet_naming_rule.non_private_fields_are_pascal_case.severity = error
+dotnet_naming_rule.non_private_fields_are_pascal_case.symbols = non_private_field_symbol
+dotnet_naming_rule.non_private_fields_are_pascal_case.style = non_private_field_style
+
+dotnet_naming_symbols.parameter_symbol.applicable_kinds = parameter
+dotnet_naming_style.parameter_style.capitalization = camel_case
+dotnet_naming_rule.parameters_are_camel_case.severity = error
+dotnet_naming_rule.parameters_are_camel_case.symbols = parameter_symbol
+dotnet_naming_rule.parameters_are_camel_case.style = parameter_style
+
+dotnet_naming_symbols.non_interface_type_symbol.applicable_kinds = class,struct,enum,delegate
+dotnet_naming_style.non_interface_type_style.capitalization = pascal_case
+dotnet_naming_rule.non_interface_types_are_pascal_case.severity = error
+dotnet_naming_rule.non_interface_types_are_pascal_case.symbols = non_interface_type_symbol
+dotnet_naming_rule.non_interface_types_are_pascal_case.style = non_interface_type_style
+
+dotnet_naming_symbols.interface_type_symbol.applicable_kinds = interface
+dotnet_naming_style.interface_type_style.capitalization = pascal_case
+dotnet_naming_style.interface_type_style.required_prefix = I
+dotnet_naming_rule.interface_types_must_be_prefixed_with_I.severity = error
+dotnet_naming_rule.interface_types_must_be_prefixed_with_I.symbols = interface_type_symbol
+dotnet_naming_rule.interface_types_must_be_prefixed_with_I.style = interface_type_style
+
+dotnet_naming_symbols.member_symbol.applicable_kinds = method,property,event
+dotnet_naming_style.member_style.capitalization = pascal_case
+dotnet_naming_rule.members_are_pascal_case.severity = error
+dotnet_naming_rule.members_are_pascal_case.symbols = member_symbol
+dotnet_naming_rule.members_are_pascal_case.style = member_style
+
+# Symbol specifications
+
+# dotnet_naming_symbols.interface.applicable_kinds = interface
+# dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+# dotnet_naming_symbols.interface.required_modifiers =
+
+# dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum
+# dotnet_naming_symbols.types.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+# dotnet_naming_symbols.types.required_modifiers =
+
+# dotnet_naming_symbols.non_field_members.applicable_kinds = property, event, method
+# dotnet_naming_symbols.non_field_members.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+# dotnet_naming_symbols.non_field_members.required_modifiers =
+
+# Naming styles
+
+# dotnet_naming_style.pascal_case.required_prefix =
+# dotnet_naming_style.pascal_case.required_suffix =
+# dotnet_naming_style.pascal_case.word_separator =
+# dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+# dotnet_naming_style.begins_with_i.required_prefix = I
+# dotnet_naming_style.begins_with_i.required_suffix =
+# dotnet_naming_style.begins_with_i.word_separator =
+# dotnet_naming_style.begins_with_i.capitalization = pascal_case
+
+[*.{xml,config,*proj,nuspec,props,resx,targets,yml,tasks}]
+indent_size = 2
+
+# Xml config files
+[*.{props,targets,ruleset,config,nuspec,resx,vsixmanifest,vsct}]
+indent_size = 2
+
+[*.json]
+indent_size = 2
+
+[*.{ps1,psm1}]
+indent_size = 4
+
+[*.sh]
+indent_size = 4
+end_of_line = lf
+
+[*.{razor,cshtml}]
+charset = utf-8-bom
+
+[*.{cs,vb}]
+# CA1018: Mark attributes with AttributeUsageAttribute
+dotnet_diagnostic.CA1018.severity = warning
+
+# CA1047: Do not declare protected member in sealed type
+dotnet_diagnostic.CA1047.severity = warning
+
+# CA1305: Specify IFormatProvider
+dotnet_diagnostic.CA1305.severity = error
+
+# CA1507: Use nameof to express symbol names
+dotnet_diagnostic.CA1507.severity = warning
+
+# CA1725: Parameter names should match base declaration
+dotnet_diagnostic.CA1725.severity = suggestion
+
+# CA1802: Use literals where appropriate
+dotnet_diagnostic.CA1802.severity = warning
+
+# CA1805: Do not initialize unnecessarily
+dotnet_diagnostic.CA1805.severity = warning
+
+# CA1823: Remove empty Finalizers
+dotnet_diagnostic.CA1821.severity = warning
+
+# CA1823: Avoid unused private fields
+dotnet_diagnostic.CA1823.severity = warning
+
+# CA1823: Avoid zero-length array allocations
+dotnet_diagnostic.CA1825.severity = warning
+
+# CA1826: Do not use Enumerable methods on indexable collections. Instead use the collection directly
+dotnet_diagnostic.CA1826.severity = warning
+
+# CA1827: Do not use Count() or LongCount() when Any() can be used
+dotnet_diagnostic.CA1827.severity = warning
+
+# CA1828: Do not use CountAsync() or LongCountAsync() when AnyAsync() can be used
+dotnet_diagnostic.CA1828.severity = warning
+
+# CA1829: Use Length/Count property instead of Count() when available
+dotnet_diagnostic.CA1829.severity = warning
+
+# CA1830: Prefer strongly-typed Append and Insert method overloads on StringBuilder
+dotnet_diagnostic.CA1830.severity = warning
+
+# CA1831: Use AsSpan or AsMemory instead of Range-based indexers when appropriate
+# CA1832: Use AsSpan or AsMemory instead of Range-based indexers when appropriate
+# CA1833: Use AsSpan or AsMemory instead of Range-based indexers when appropriate
+dotnet_diagnostic.CA1831.severity = warning
+dotnet_diagnostic.CA1832.severity = warning
+dotnet_diagnostic.CA1833.severity = warning
+
+# CA1834: Consider using 'StringBuilder.Append(char)' when applicable
+dotnet_diagnostic.CA1834.severity = warning
+
+# CA1835: Prefer the 'Memory'-based overloads for 'ReadAsync' and 'WriteAsync'
+dotnet_diagnostic.CA1835.severity = warning
+
+# CA1836: Prefer IsEmpty over Count
+dotnet_diagnostic.CA1836.severity = warning
+
+# CA1837: Use 'Environment.ProcessId'
+dotnet_diagnostic.CA1837.severity = warning
+
+# CA1838: Avoid 'StringBuilder' parameters for P/Invokes
+dotnet_diagnostic.CA1838.severity = warning
+
+# CA1839: Use 'Environment.ProcessPath'
+dotnet_diagnostic.CA1839.severity = warning
+
+# CA1840: Use 'Environment.CurrentManagedThreadId'
+dotnet_diagnostic.CA1840.severity = warning
+
+# CA1841: Prefer Dictionary.Contains methods
+dotnet_diagnostic.CA1841.severity = warning
+
+# CA1845: Use span-based 'string.Concat'
+dotnet_diagnostic.CA1845.severity = warning
+
+# CA1846: Prefer AsSpan over Substring
+dotnet_diagnostic.CA1846.severity = warning
+
+# CA2012: Use ValueTask correctly
+dotnet_diagnostic.CA2012.severity = warning
+
+[**/HostFactoryResolver.cs]
+# CA1823: Use literals where appropriate
+dotnet_diagnostic.CA1802.severity = suggestion
+
+[**/{test,samples,perf}/**.{cs,vb}]
+# CA1018: Mark attributes with AttributeUsageAttribute
+dotnet_diagnostic.CA1018.severity = suggestion
+# CA1507: Use nameof to express symbol names
+dotnet_diagnostic.CA1507.severity = suggestion
+# CA1802: Use literals where appropriate
+dotnet_diagnostic.CA1802.severity = suggestion
+# CA1805: Do not initialize unnecessarily
+dotnet_diagnostic.CA1805.severity = suggestion
+# CA1823: Avoid zero-length array allocations
+dotnet_diagnostic.CA1825.severity = suggestion
+# CA1826: Do not use Enumerable methods on indexable collections. Instead use the collection directly
+dotnet_diagnostic.CA1826.severity = suggestion
+# CA1827: Do not use Count() or LongCount() when Any() can be used
+dotnet_diagnostic.CA1827.severity = suggestion
+# CA1829: Use Length/Count property instead of Count() when available
+dotnet_diagnostic.CA1829.severity = suggestion
+# CA1834: Consider using 'StringBuilder.Append(char)' when applicable
+dotnet_diagnostic.CA1834.severity = suggestion
+# CA1835: Prefer the 'Memory'-based overloads for 'ReadAsync' and 'WriteAsync'
+dotnet_diagnostic.CA1835.severity = suggestion
+# CA1837: Use 'Environment.ProcessId'
+dotnet_diagnostic.CA1837.severity = suggestion
+# CA1838: Avoid 'StringBuilder' parameters for P/Invokes
+dotnet_diagnostic.CA1838.severity = suggestion
+# CA1841: Prefer Dictionary.Contains methods
+dotnet_diagnostic.CA1841.severity = suggestion
+# CA2012: Use ValueTask correctly
+dotnet_diagnostic.CA2012.severity = suggestion
