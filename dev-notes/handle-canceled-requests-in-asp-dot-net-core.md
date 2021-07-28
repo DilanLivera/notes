@@ -1,4 +1,4 @@
-# Handle Canceled Requests
+# Handle Canceled Requests in ASP.Net Core
 
 ## Stop asynchronous work
 
