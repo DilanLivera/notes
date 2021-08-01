@@ -6,10 +6,6 @@
   - [NuGet package](https://www.nuget.org/packages/Serilog.AspNetCore)
   - [GitHub Repository](https://github.com/serilog/serilog-aspnetcore)
 
-- Serilog.Sinks.File
-  - [NuGet package](https://www.nuget.org/packages/Serilog.Sinks.File)
-  - [GitHub Repository](https://github.com/serilog/serilog-sinks-file)
-
 - Serilog.Sinks.Async
   - [NuGet package](https://www.nuget.org/packages/serilog.sinks.async)
   - [GitHub Repository](https://github.com/serilog/serilog-sinks-async)
@@ -109,7 +105,7 @@ public class Program
 
     public static void ConfigureAsyncWrapper(LoggerSinkConfiguration loggerSinkConfiguration)
     {
-        const string logFilePath = "Logs/log-.txt";
+        const string logFilePath = "./Logs/log-.log";
         loggerSinkConfiguration.File(
             formatter: new CompactJsonFormatter(),
             path: logFilePath,
@@ -144,10 +140,7 @@ Add the Serilog configuration to the `appsettings.json` file. This is not necess
         "Args": {
           "Configure": [
             {
-              "Name": "Console",
-              "Args": {
-                "formatter": "Serilog.Formatting.Elasticsearch.ElasticsearchJsonFormatter,Serilog.Formatting.Elasticsearch"
-              }
+              "Name": "Console"
             },
             {
               "Name": "File",
