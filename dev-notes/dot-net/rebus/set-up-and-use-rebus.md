@@ -15,10 +15,10 @@ public class Startup
 
                 rebusConfigurer.Transport(transport =>  transport
                     .UseRabbitMq(
-                    rabbitConfig.Value.RabbitSettings.ConnectionString,
-                    rabbitConfig.Value.RabbitSettings.QueueName)
+                        rabbitConfig.Value.RabbitSettings.ConnectionString,
+                        rabbitConfig.Value.RabbitSettings.QueueName)
                     .InputQueueOptions(queueOptionsBuilder => 
-                    queueOptionsBuilder.SetAutoDelete(autoDelete: true)));
+                        queueOptionsBuilder.SetAutoDelete(autoDelete: true)));
 
                 return rebusConfigurer;
             });

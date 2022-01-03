@@ -60,7 +60,6 @@ using (var context = new CourseContext(options))
             _logLevel = logLevel;
         }
 
-
         public IDisposable BeginScope<TState>(TState state)
         {
             return null;
