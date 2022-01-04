@@ -1,0 +1,9 @@
+# {{title}}
+
+## Resources
+
+-
+
+## Tags
+
+#template
