@@ -7,10 +7,12 @@
 [Course Link](https://www.pluralsight.com/courses/asp-dot-net-core-health-checks)
 
 There are two types of health checks.
+
 1. Liveness health check - Only report if the application is running.
 2. Readiness health check - Allows you to check the health of any additional functionality that your application needs in order to function.
 
 ### Health Status
+
 - Healthy
 - Degraded
 - Unhealthy
@@ -19,4 +21,4 @@ There are two types of health checks.
 
 ## Tags
 
-#health-checks #pluralsight 
+#health-checks #pluralsight
