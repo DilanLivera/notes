@@ -95,9 +95,9 @@
    💡 The last three are not executed if there is no server response. And ***Timers***, ***Assertions***,  ***Pre*** and ***Post-processors*** are only executed if there is a sampler to which they can be applied.
 
 ### Configuration elements rules
-   
+
 - The ***User Defined Variables*** configuration element is processed at the start of a test, no matter where it is placed.
-   
+
 - A ***Configuration Element*** inside a tree brach has higher precedence than another element of the same type in a outer branch.
 	- Configuration default elements are merged, Managers are not(They are replaced by elements with high precedence).
 
