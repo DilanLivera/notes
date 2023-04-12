@@ -2,7 +2,7 @@
 
 The following is from the [JMeter - Getting Started by Esteban Herrera](https://www.pluralsight.com/courses/jmeter-getting-started) course.
 
-![[components_of_a_test_script.png]]
+![components_of_a_test_script.png](./images/components_of_a_test_script.png)
 
 - **_setUp_** thread group is used to perform actions before JMeter start executing a regular thread group. **_tearDown_** thread group is run after the test has finished.
 
@@ -44,6 +44,6 @@ The following is from the [JMeter - Getting Started by Esteban Herrera](https://
 
 - JMeter executes the elements of a **_Test Plan_** in the following order,
 
-    ![[execution_order_of_elements_in_a_test_plan.png]]
+    ![execution_order_of_elements_in_a_test_plan.png](./images/execution_order_of_elements_in_a_test_plan.png)
 
 💡 The last three are not executed if there is no server response. And **_Timers_**, **_Assertions_**, **_Pre_** and **_Post-processors_** are only executed if there is a sampler to which they can be applied.

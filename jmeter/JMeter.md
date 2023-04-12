@@ -2,11 +2,11 @@
 
 ## Contents
 
-- [[Performance testing]]
-- [[Plugins]]
-- [[Configuring a test plan]]
-- [[Configuration elements rules]]
-- [[Recording a test]]
+- [Performance testing](./Performance%20testing.md)
+- [Plugins](./Plugins.md)
+- [Configuring a test plan](./Configuring%20a%20test%20plan.md)
+- [Configuration elements rules](./Configuration%20elements%20rules.md)
+- [Recording a test](./Recording%20a%20test.md)
 
 ## Resources
 
